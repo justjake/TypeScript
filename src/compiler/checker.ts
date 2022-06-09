@@ -618,14 +618,28 @@ namespace ts {
             },
             getApparentType,
             getUnionType,
+            isTypeIdenticalTo,
+            isTypeSubtypeOf,
             isTypeAssignableTo,
+            isTypeComparableTo,
+            lookupGlobalType: (typeName) => getGlobalType(escapeLeadingUnderscores(typeName), 0, false),
+            lookupTypeAt: (typeName, position) => {
+                const symbol = resolveName(position, escapeLeadingUnderscores(typeName), SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, false)
+                if (symbol) {
+                    return getTypeOfSymbolAtLocation(symbol, position)
+                }
+            },
             createAnonymousType,
             createSignature,
             createSymbol,
             createIndexInfo,
             getAnyType: () => anyType,
             getStringType: () => stringType,
+            getStringLiteralType,
             getNumberType: () => numberType,
+            getNumberLiteralType,
+            getBigIntType: getGlobalBigIntType,
+            getBigIntLiteralType,
             createPromiseType,
             createArrayType,
             getElementTypeOfArrayType,

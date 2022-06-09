@@ -4209,7 +4209,6 @@ namespace ts {
         getWidenedType(type: Type): Type;
         /* @internal */
         getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
-        /* @internal */
         getAwaitedType(type: Type): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
@@ -4346,17 +4345,21 @@ namespace ts {
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
 
-        /* @internal */ getAnyType(): Type;
-        /* @internal */ getStringType(): Type;
-        /* @internal */ getNumberType(): Type;
-        /* @internal */ getBooleanType(): Type;
+        getAnyType(): Type;
+        getStringType(): Type;
+        getStringLiteralType(text: string): StringLiteralType;
+        getNumberType(): Type;
+        getNumberLiteralType(number: number): NumberLiteralType;
+        getBigIntType(): Type;
+        getBigIntLiteralType(pseudoBigInt: PseudoBigInt): BigIntLiteralType;
+        getBooleanType(): Type;
         /* @internal */ getFalseType(fresh?: boolean): Type;
         /* @internal */ getTrueType(fresh?: boolean): Type;
-        /* @internal */ getVoidType(): Type;
-        /* @internal */ getUndefinedType(): Type;
-        /* @internal */ getNullType(): Type;
-        /* @internal */ getESSymbolType(): Type;
-        /* @internal */ getNeverType(): Type;
+        getVoidType(): Type;
+        getUndefinedType(): Type;
+        getNullType(): Type;
+        getESSymbolType(): Type;
+        getNeverType(): Type;
         /* @internal */ getOptionalType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
@@ -4364,8 +4367,14 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
         /* @internal */ getPromiseType(): Type;
         /* @internal */ getPromiseLikeType(): Type;
-
-        /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
+        /** Look up a global type with the given name. */
+        lookupGlobalType(typeName: string): Type | undefined
+        /** Resolve a type name lexically at the position specified. */
+        lookupTypeAt(typeName: string, position: Node): Type | undefined
+        isTypeIdenticalTo(source: Type, target: Type): boolean; // Exposes internal identity relationship
+        isTypeSubtypeOf(source: Type, target: Type): boolean; // Exposes internal structural subtype relationship
+        isTypeComparableTo(source: Type, target: Type): boolean; // Exposes internal comparable relationship
+        isTypeAssignableTo(source: Type, target: Type): boolean; // Exposes internal assignable relationship
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
         /* @internal */ createSignature(
             declaration: SignatureDeclaration | undefined,
@@ -4399,7 +4408,7 @@ namespace ts {
         /* @internal */ getRecursionIdentity(type: Type): object | undefined;
         /* @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
 
-        /* @internal */ isArrayType(type: Type): boolean;
+        isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
 
